@@ -21,7 +21,7 @@ export const authRepository = {
     if (error) throw new Error(error.message);
     return {
       ...data.user,
-      userName: data.user.user_metadata,
+      userName: data.user.user_metadata.name,
     };
   },
   async getCurrentUser() {
@@ -31,7 +31,7 @@ export const authRepository = {
 
     return {
       ...data.session.user,
-      userName: data.session.user.user_metadata,
+      userName: data.session.user.user_metadata.name,
     };
   },
 };

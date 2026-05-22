@@ -1,12 +1,12 @@
 import { Link, Navigate } from "react-router-dom";
 import { authRepository } from "../repositories/auth";
 import { useContext, useState } from "react";
-import { SessionCotext } from "../SessionProvider";
+import { SessionContext } from "../SessionProvider";
 
 function Signin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { currentUser, setCurrentUser } = useContext(SessionCotext);
+  const { currentUser, setCurrentUser } = useContext(SessionContext);
 
   const signin = async () => {
     const user = await authRepository.signin(email, password);

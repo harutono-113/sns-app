@@ -1,13 +1,13 @@
 import { useContext, useState } from "react";
 import { authRepository } from "../repositories/auth";
-import { SessionCotext } from "../SessionProvider";
+import { SessionContext } from "../SessionProvider";
 import { Navigate } from "react-router-dom";
 
 function Signup() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { currentUser, setCurrentUser } = useContext(SessionCotext);
+  const { currentUser, setCurrentUser } = useContext(SessionContext);
 
   const signup = async () => {
     const user = await authRepository.signup(name, email, password);

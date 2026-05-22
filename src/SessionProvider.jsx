@@ -1,7 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import { authRepository } from "./repositories/auth";
 
-const SessionCotext = createContext();
+const SessionContext = createContext();
 const SessionProvider = (props) => {
   const [currentUser, setCurrentUser] = useState();
   const [isLoading, setIsLoading] = useState(true);
@@ -18,10 +18,10 @@ const SessionProvider = (props) => {
   if (isLoading) return <div />;
 
   return (
-    <SessionCotext.Provider value={{ currentUser, setCurrentUser }}>
+    <SessionContext.Provider value={{ currentUser, setCurrentUser }}>
       {props.children}
-    </SessionCotext.Provider>
+    </SessionContext.Provider>
   );
 };
 
-export { SessionCotext, SessionProvider };
+export { SessionContext, SessionProvider };
