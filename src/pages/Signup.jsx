@@ -1,16 +1,20 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { authRepository } from "../repositories/auth";
+import { SessionCotext } from "../SessionProvider";
+import { Navigate } from "react-router-dom";
 
 function Signup() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { currentUser, setCurrentUser } = useContext(SessionCotext);
 
   const signup = async () => {
     const user = await authRepository.signup(name, email, password);
-    console.log(user);
+    setCurrentUser(user);
   };
 
+  if (currentUser != null) return <Navigate replace to="/" />;
   return (
     <div className="min-h-screen bg-gray-100 py-10 px-4 sm:px-6 lg:px-8">
       <div className="flex flex-col items-center">
