@@ -48,19 +48,22 @@
 
 サービスの入口として、`Komorebi` の空気感が最初に伝わるようにしました。
 
-![ログイン画面]
+<img width="1913" height="992" alt="image" src="https://github.com/user-attachments/assets/aa1199a4-c847-43c2-842d-870f6c99c025" />
+
 
 ### 新規登録画面
 
 はじめて使う人にも、どんな記録を残す場所なのかが伝わるようにしています。
 
-![新規登録画面]
+<img width="1920" height="992" alt="スクリーンショット 2026-05-28 23 40 52" src="https://github.com/user-attachments/assets/e609aa40-00f2-4d7d-bcdc-4a6bb71f6423" />
+
 
 ### ホーム画面
 
 投稿欄、投稿一覧、プロフィールを分けて、落ち着いて読めるレイアウトにしました。
 
-![ホーム画面]
+<img width="1907" height="992" alt="image" src="https://github.com/user-attachments/assets/bd074f26-3d30-485a-9e72-5c36dac29726" />
+
 
 ---
 
