@@ -1,7 +1,17 @@
 import { useContext, useState } from "react";
-import { authRepository } from "../repositories/auth";
+import { AuthCard } from "../components/auth/AuthCard";
+import { AuthLayout } from "../components/auth/AuthLayout";
+import { AuthTextField } from "../components/auth/AuthTextField";
 import { SessionContext } from "../SessionProvider";
 import { Navigate } from "react-router-dom";
+import { authRepository } from "../repositories/authRepository";
+
+const signupHero = {
+  title: "写真と言葉で、暮らしの輪郭を残そう。",
+  description:
+    "20-30代の暮らし好き・創作好き・学び続ける人へ。派手な拡散より、自分らしい記録と穏やかなつながりを大切にします。",
+  tags: ["暮らし", "創作", "学び"],
+};
 
 function Signup() {
   const [name, setName] = useState("");
@@ -16,87 +26,43 @@ function Signup() {
 
   if (currentUser != null) return <Navigate replace to="/" />;
   return (
-    <div className="min-h-screen bg-gray-100 py-10 px-4 sm:px-6 lg:px-8">
-      <div className="flex flex-col items-center">
-        <h2 className="text-3xl font-extrabold text-gray-900">SNS APP</h2>
-        <div className="mt-8 w-full max-w-md">
-          <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-            <div className="space-y-6">
-              <div>
-                <label
-                  className="block text-sm font-medium text-gray-700"
-                  htmlFor="username"
-                >
-                  ユーザー名
-                </label>
-                <div className="mt-1">
-                  <input
-                    onChange={(e) => setName(e.target.value)}
-                    id="username"
-                    name="username"
-                    placeholder="ユーザー名"
-                    required
-                    type="text"
-                    className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                  />
-                </div>
-              </div>
-              <div>
-                <label
-                  className="block text-sm font-medium text-gray-700"
-                  htmlFor="email"
-                >
-                  メールアドレス
-                </label>
-                <div className="mt-1">
-                  <input
-                    onChange={(e) => {
-                      setEmail(e.target.value);
-                    }}
-                    id="email"
-                    name="email"
-                    placeholder="メールアドレス"
-                    required
-                    type="email"
-                    className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                  />
-                </div>
-              </div>
-              <div>
-                <label
-                  className="block text-sm font-medium text-gray-700"
-                  htmlFor="password"
-                >
-                  パスワード
-                </label>
-                <div className="mt-1">
-                  <input
-                    onChange={(e) => {
-                      setPassword(e.target.value);
-                    }}
-                    id="password"
-                    name="password"
-                    placeholder="パスワード"
-                    required
-                    type="password"
-                    className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                  />
-                </div>
-              </div>
-              <div>
-                <button
-                  onClick={signup}
-                  className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
-                  disabled={name === "" || email === "" || password === ""}
-                >
-                  登録
-                </button>
-              </div>
-            </div>
-          </div>
+    <AuthLayout hero={signupHero}>
+      <AuthCard
+        title="はじめましょう"
+        description="あなたの小さな記録を残すためのアカウントを作成します。"
+      >
+        <div className="space-y-6">
+          <AuthTextField
+            id="username"
+            label="ユーザー名"
+            onChange={setName}
+            placeholder="ユーザー名"
+            type="text"
+          />
+          <AuthTextField
+            id="email"
+            label="メールアドレス"
+            onChange={setEmail}
+            placeholder="メールアドレス"
+            type="email"
+          />
+          <AuthTextField
+            id="password"
+            label="パスワード"
+            onChange={setPassword}
+            placeholder="パスワード"
+            type="password"
+          />
+          <button
+            className="flex w-full justify-center rounded-full bg-emerald-900 px-4 py-3 text-sm font-bold text-white shadow-lg shadow-emerald-900/20 transition hover:-translate-y-0.5 hover:bg-emerald-800 disabled:translate-y-0 disabled:cursor-not-allowed disabled:opacity-40"
+            disabled={name === "" || email === "" || password === ""}
+            onClick={signup}
+          >
+            登録
+          </button>
         </div>
-      </div>
-    </div>
+      </AuthCard>
+    </AuthLayout>
   );
 }
 

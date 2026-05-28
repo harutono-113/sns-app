@@ -1,19 +1,20 @@
 import { createContext, useEffect, useState } from "react";
-import { authRepository } from "./repositories/auth";
+import { authRepository } from "./repositories/authRepository";
 
 const SessionContext = createContext();
 const SessionProvider = (props) => {
   const [currentUser, setCurrentUser] = useState();
   const [isLoading, setIsLoading] = useState(true);
-  useEffect(() => {
-    setSession();
-  }, []);
 
-  const setSession = async () => {
-    const currentUser = await authRepository.getCurrentUser();
-    setCurrentUser(currentUser);
-    setIsLoading(false);
-  };
+  useEffect(() => {
+    async function loadSession() {
+      const currentUser = await authRepository.getCurrentUser();
+      setCurrentUser(currentUser);
+      setIsLoading(false);
+    }
+
+    loadSession();
+  }, []);
 
   if (isLoading) return <div />;
 

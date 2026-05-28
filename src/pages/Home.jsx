@@ -1,53 +1,18 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import { SessionContext } from "../SessionProvider";
 import { Navigate } from "react-router-dom";
-import { SideMenu } from "../components/sideMenu";
-import { Post } from "../components/Post";
-import { postRepository } from "../repositories/post";
-import { Pagination } from "../components/Pagination";
-import { authRepository } from "../repositories/auth";
+import { PostCard } from "../components/feed/PostCard";
+import { PostComposer } from "../components/feed/PostComposer";
+import { FeedPagination } from "../components/feed/FeedPagination";
+import { AppHeader } from "../components/layout/AppHeader";
+import { HomeHero } from "../components/layout/HomeHero";
+import { ProfileSidebar } from "../components/profile/ProfileSidebar";
+import { usePostsFeed } from "../hooks/usePostsFeed";
+import { authRepository } from "../repositories/authRepository";
 
-const limit = 5;
 function Home() {
-  const [content, setContent] = useState("");
-  const [posts, setPosts] = useState([]);
-  const [page, setPage] = useState(1);
   const { currentUser, setCurrentUser } = useContext(SessionContext);
-
-  useEffect(() => {
-    fetchPosts();
-  }, []);
-
-  const createPost = async () => {
-    const post = await postRepository.create(content, currentUser.id);
-    setPosts([
-      { ...post, userId: currentUser.id, userName: currentUser.userName },
-      ...posts,
-    ]);
-    setContent("");
-  };
-
-  const fetchPosts = async (page) => {
-    const posts = await postRepository.find(page, limit);
-    setPosts(posts);
-  };
-
-  const moveToNext = async () => {
-    const nextPage = page + 1;
-    await fetchPosts(nextPage);
-    setPage(nextPage);
-  };
-
-  const moveToPrev = async () => {
-    const prevPage = page - 1;
-    await fetchPosts(prevPage);
-    setPage(prevPage);
-  };
-
-  const deletePost = async (postId) => {
-    await postRepository.delete(postId);
-    setPosts(posts.filter((post) => post.id !== postId));
-  };
+  const feed = usePostsFeed(currentUser);
 
   const signout = async () => {
     await authRepository.signout();
@@ -56,46 +21,35 @@ function Home() {
 
   if (currentUser == null) return <Navigate replace to="/signin" />;
   return (
-    <div className="min-h-screen bg-gray-100">
-      <header className="bg-[#34D399] p-4">
-        <div className="container mx-auto flex items-center justify-between">
-          <h1 className="text-3xl font-bold text-white">SNS APP</h1>
-          <button className="text-white hover:text-red-600" onClick={signout}>
-            ログアウト
-          </button>
-        </div>
-      </header>
-      <div className="container mx-auto mt-6 p-4">
-        <div className="grid grid-cols-3 gap-4">
-          <div className="col-span-2">
-            <div className="bg-white p-4 rounded-lg shadow-md">
-              <textarea
-                className="w-full p-2 mb-4 border-2 border-gray-200 rounded-md"
-                placeholder="What's on your mind?"
-                onChange={(e) => setContent(e.target.value)}
-                value={content}
-              />
-              <button
-                className="bg-[#34D399] text-white px-4 py-2 rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-opacity-50 disabled:opacity-50 disabled:cursor-not-allowed"
-                onClick={createPost}
-                disabled={content === ""}
-              >
-                Post
-              </button>
-            </div>
-            <div className="mt-4">
-              {posts.map((post) => (
-                <Post key={post.id} post={post} onDelete={deletePost} />
+    <div className="min-h-screen bg-[#f8f4ea] text-stone-900">
+      <AppHeader onSignout={signout} />
+      <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
+        <HomeHero userName={currentUser.userName} />
+
+        <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
+          <div>
+            <PostComposer
+              content={feed.content}
+              onChange={feed.setContent}
+              onSubmit={feed.createPost}
+            />
+            <div className="mt-5">
+              {feed.posts.map((post) => (
+                <PostCard
+                  key={post.id}
+                  post={post}
+                  onDelete={feed.deletePost}
+                />
               ))}
             </div>
-            <Pagination
-              onPrev={page > 1 ? moveToPrev : null}
-              onNext={posts.length >= limit ? moveToNext : null}
+            <FeedPagination
+              onPrev={feed.canMoveToPrev ? feed.moveToPrev : null}
+              onNext={feed.canMoveToNext ? feed.moveToNext : null}
             />
           </div>
-          <SideMenu />
+          <ProfileSidebar />
         </div>
-      </div>
+      </main>
     </div>
   );
 }
